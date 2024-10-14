@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/app_for_learning_words_API/static/css/main.0fb1362f.css",
-    "main.js": "/app_for_learning_words_API/static/js/main.07938505.js",
+    "main.js": "/app_for_learning_words_API/static/js/main.63466499.js",
     "static/js/453.81e61438.chunk.js": "/app_for_learning_words_API/static/js/453.81e61438.chunk.js",
     "static/media/logo_1.png": "/app_for_learning_words_API/static/media/logo_1.8985ee4a952875e99e3c.png",
     "index.html": "/app_for_learning_words_API/index.html",
     "static/media/arrow_left.svg": "/app_for_learning_words_API/static/media/arrow_left.30b7212ae04cc1163562af698e9ea2ae.svg",
     "static/media/arrow_right.svg": "/app_for_learning_words_API/static/media/arrow_right.449c6a03ffaa38ed4ef9c807de958e88.svg",
     "main.0fb1362f.css.map": "/app_for_learning_words_API/static/css/main.0fb1362f.css.map",
-    "main.07938505.js.map": "/app_for_learning_words_API/static/js/main.07938505.js.map",
+    "main.63466499.js.map": "/app_for_learning_words_API/static/js/main.63466499.js.map",
     "453.81e61438.chunk.js.map": "/app_for_learning_words_API/static/js/453.81e61438.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0fb1362f.css",
-    "static/js/main.07938505.js"
+    "static/js/main.63466499.js"
   ]
 }
