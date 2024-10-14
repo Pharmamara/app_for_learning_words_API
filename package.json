@@ -1,6 +1,6 @@
 {
-  "homepage": "https://pharmamara.github.io/app_for_learning_words/",
-  "name": "app_for_learning_words",
+  "homepage": "https://pharmamara.github.io/app_for_learning_words_API/",
+  "name": "app_for_learning_words_api",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -43,6 +43,6 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.1.1"
+    "gh-pages": "^6.2.0"
   }
 }
