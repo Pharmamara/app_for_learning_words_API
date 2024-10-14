@@ -1,0 +1,25 @@
+.wordContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  min-height: 250px;
+  margin: auto;
+  padding: 1em;
+  background: #fff;
+  box-shadow: 0 0 10px 5px rgba(221, 221, 221, 1);
+  cursor: pointer;
+}
+
+.word {
+  font-size: 2em;
+}
+
+.transcription {
+  font-weight: 400;
+}
+
+.nav_btn {
+  max-height: 50px;
+}

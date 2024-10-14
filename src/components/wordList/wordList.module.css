@@ -1,0 +1,28 @@
+.container {
+  width: 90vw;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.listContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) 2fr;
+  justify-content: start;
+  padding: 1em;
+  column-gap: 5px;
+  font-size: 1.3em;
+  font-weight: 600;
+  text-align: start;
+  color: black;
+}
+
+.wordItem {
+  list-style: none;
+  color: black;
+  justify-content: center;
+  overflow-wrap: break-word;
+}
+.heading {
+  font-weight: bolder;
+  color: gray;
+}

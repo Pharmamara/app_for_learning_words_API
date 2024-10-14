@@ -1,0 +1,33 @@
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  height: 40px;
+  margin: 0.85em;
+  border: none;
+  background-color: #367e29;
+  -webkit-box-shadow: 4px 4px 28px 11px rgba(34, 60, 80, 0.28);
+  -moz-box-shadow: 4px 4px 28px 11px rgba(34, 60, 80, 0.28);
+  box-shadow: 4px 4px 28px 11px rgba(34, 60, 80, 0.28);
+  text-align: center;
+  font-size: 1em;
+  color: white;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: rgb(245, 166, 166);
+  color: white;
+}
+
+.btn:active {
+  background-color: rgb(243, 44, 44);
+  color: white;
+}
+
+.translate {
+  margin: 1em;
+  color: white;
+  font-size: 1.3em;
+}

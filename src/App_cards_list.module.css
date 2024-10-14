@@ -1,0 +1,116 @@
+.App {
+  max-width: 90%;
+  margin: auto;
+}
+/*блок карточки слов*/
+.main {
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+  flex-flow: column wrap;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  min-width: 90%;
+  background-color: rgb(214, 214, 214);
+}
+
+.prev_btn,
+.next_btn {
+  border: none;
+  cursor: pointer;
+}
+
+.nav_btn {
+  max-height: 50px;
+}
+.wordContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  min-height: 250px;
+  margin: auto;
+  padding: 1em;
+  background: #fff;
+  box-shadow: 0 0 10px 5px rgba(221, 221, 221, 1);
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.word {
+  font-size: 2em;
+}
+
+.transcription {
+  font-weight: 400;
+}
+/*блок список слов*/
+.listContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 15%) 30%;
+  justify-content: center;
+  padding: 0;
+  column-gap: 0.5em;
+  font-size: 1.1em;
+  color: black;
+  text-align: center;
+}
+.wordItem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0.8em 0;
+  height: 40px;
+  padding-left: 1em;
+  border: none;
+  border-radius: 1em;
+}
+.buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5em;
+}
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  height: 40px;
+  margin: 0.85em;
+  border-radius: 1em;
+  border: none;
+  background-color: #bfc0c1;
+  text-align: center;
+  font-size: 1em;
+  cursor: pointer;
+}
+.btn:hover {
+  background-color: rgb(240, 140, 143);
+}
+
+.btn:active {
+  background-color: rgb(140, 240, 173);
+}
+.input {
+  margin: 0.8em 0;
+  height: 40px;
+  padding-left: 1em;
+  border: solid 2px red;
+  border-radius: 1em;
+  background-color: rgb(245, 245, 245);
+}
+.input:focus {
+  border: 2px solid #3bc161;
+  outline: none;
+}
+
+.input:hover {
+  background-color: rgb(210, 208, 208);
+}
