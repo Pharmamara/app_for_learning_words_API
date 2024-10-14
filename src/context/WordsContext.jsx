@@ -5,7 +5,7 @@ import axios from "axios";
 export const WordsContext = createContext();
 
 // URL API для получения слов
-const API_URL = "http://itgirlschool.justmakeit.ru/api/words";
+const API_URL = "https://itgirlschool.justmakeit.ru/api/words";
 
 // Провайдер для контекста
 export const WordsProvider = ({ children }) => {
