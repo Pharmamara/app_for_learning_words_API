@@ -1,12 +1,11 @@
 import React, { useState, useContext } from "react";
+import { updateWord, deleteWord } from "../../api/wordAPI";
 import { WordsContext } from "../../context/WordsContext"; // Импортируем контекст
 import Loader from "../loader/loader";
 import style from "./wordTable.module.css";
 
 export default function WordTable({ wordItem }) {
-  const { setWords, loading } = useContext(WordsContext); // Получаем функцию для обновления слов
-
-  // Для валидации полей
+  const { setWords, loading } = useContext(WordsContext); // Данные из контекста
   const [errors, setErrors] = useState({
     name: false,
     nameRussian: false,
@@ -23,6 +22,37 @@ export default function WordTable({ wordItem }) {
 
   if (loading) return <Loader />;
 
+  // Метод для сохранения изменений после обновления слова
+  const handleSave = async () => {
+    const updatedWord = {
+      english: name,
+      russian: nameRussian,
+      transcription: nameTranscription,
+      tags: nameTag,
+    };
+
+    try {
+      const updated = await updateWord(id, updatedWord);
+      setWords((prevWords) =>
+        prevWords.map((word) => (word.id === id ? updated : word))
+      );
+      setEditMode(false); // Закрываем режим редактирования после сохранения
+    } catch (error) {
+      console.error("Ошибка при обновлении слова:", error);
+    }
+  };
+
+  // Метод для удаления слова
+  const handleDelete = async () => {
+    try {
+      await deleteWord(id);
+      setWords((prevWords) => prevWords.filter((word) => word.id !== id));
+    } catch (error) {
+      console.error("Ошибка при удалении слова:", error);
+    }
+  };
+
+  // Обработчики полей ввода
   const handleNameChange = (event) => {
     setName(event.target.value);
     setErrors((prevErrors) => ({ ...prevErrors, name: !event.target.value }));
@@ -58,31 +88,6 @@ export default function WordTable({ wordItem }) {
 
   const handleCancel = () => {
     setEditMode(!isEditMode);
-    // Возвращаем исходные значения при отмене редактирования
-    setName(english);
-    setNameRussian(russian);
-    setNameTranscription(transcription);
-    setNameTag(tags);
-  };
-
-  const handleSave = () => {
-    const updatedWord = {
-      id,
-      english: name,
-      russian: nameRussian,
-      transcription: nameTranscription,
-      tags: nameTag,
-    };
-    // Обновляем коллекцию слов через setWords
-    setWords((prevWords) =>
-      prevWords.map((word) => (word.id === id ? updatedWord : word))
-    );
-    setEditMode(false);
-  };
-
-  const handleDelete = () => {
-    // Удаляем слово из коллекции через setWords
-    setWords((prevWords) => prevWords.filter((word) => word.id !== id));
   };
 
   // Проверка на наличие пустых полей
