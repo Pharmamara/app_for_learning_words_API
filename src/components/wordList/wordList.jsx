@@ -3,6 +3,7 @@ import WordTable from "../wordTable/wordTable";
 import Loader from "../loader/loader";
 import { WordsContext } from "../../context/WordsContext"; // Импортируем контекст
 import style from "./wordList.module.css";
+import AddWord from "../addWord/addWord";
 
 export default function WordList() {
   const { words, loading, error } = useContext(WordsContext); // Получаем слова из контекста
@@ -20,6 +21,7 @@ export default function WordList() {
         <li className={style.wordItem}>Тэг</li>
         <li className={style.wordItem}>Действия</li>
       </ul>
+      <AddWord />
       {words.map((wordItem) => (
         <WordTable key={wordItem.id} wordItem={wordItem} />
       ))}
