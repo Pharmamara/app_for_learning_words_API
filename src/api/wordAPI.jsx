@@ -1,5 +1,5 @@
 // API взаимодействие с сервером
-const API_URL = "https://itgirlschool.justmakeit.ru/api/words";
+export const API_URL = "https://itgirlschool.justmakeit.ru/api/words";
 
 // Метод для обновления слова на сервере после редактирования
 export const updateWord = async (wordId, updatedWord) => {

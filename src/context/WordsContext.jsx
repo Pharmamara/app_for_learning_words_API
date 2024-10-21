@@ -31,7 +31,7 @@ export const WordsProvider = ({ children }) => {
   }, []);
 
   return (
-    <WordsContext.Provider value={{ words, loading, error }}>
+    <WordsContext.Provider value={{ setWords, words, loading, error }}>
       {children}
     </WordsContext.Provider>
   );

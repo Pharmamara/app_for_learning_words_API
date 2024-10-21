@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { WordsContext } from "../../context/WordsContext"; // Подключаем контекст
+import { API_URL } from "./../../api/wordAPI";
 import style from "./addWord.module.css";
 
 export default function AddWord() {
@@ -24,16 +25,10 @@ export default function AddWord() {
   // Функция добавления слова в API
   const handleAddWord = async () => {
     try {
-      const response = await fetch(
-        "https://itgirlschool.justmakeit.ru/api/words/add",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newWord), // Отправляем новое слово на сервер
-        }
-      );
+      const response = await fetch(`${API_URL}/add`, {
+        method: "POST",
+        body: JSON.stringify(newWord), // Отправляем новое слово на сервер
+      });
 
       if (!response.ok) {
         throw new Error("Ошибка при добавлении слова");
