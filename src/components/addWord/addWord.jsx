@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+/*import React, { useState, useContext } from "react";
 import { WordsContext } from "../../context/WordsContext"; // Подключаем контекст
 import { API_URL } from "./../../api/wordAPI";
 import style from "./addWord.module.css";
@@ -127,4 +127,72 @@ export default function AddWord() {
       )}
     </div>
   );
-}
+}*/
+
+import React, { useState } from "react";
+import { observer } from "mobx-react-lite";
+import wordStore from "../../WordStore";
+import style from "./addWord.module.css";
+
+const AddWord = observer(() => {
+  const [newWord, setNewWord] = useState({
+    english: "",
+    russian: "",
+    transcription: "",
+    tags: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewWord((prevWord) => ({
+      ...prevWord,
+      [name]: value,
+    }));
+  };
+
+  const handleAdd = () => {
+    wordStore.addWord(newWord);
+    setNewWord({
+      english: "",
+      russian: "",
+      transcription: "",
+      tags: "",
+    });
+  };
+
+  return (
+    <div className={style.container}>
+      <input
+        type="text"
+        name="english"
+        value={newWord.english}
+        onChange={handleChange}
+        placeholder="Введите слово"
+      />
+      <input
+        type="text"
+        name="russian"
+        value={newWord.russian}
+        onChange={handleChange}
+        placeholder="Введите перевод"
+      />
+      <input
+        type="text"
+        name="transcription"
+        value={newWord.transcription}
+        onChange={handleChange}
+        placeholder="Введите транскрипцию"
+      />
+      <input
+        type="text"
+        name="tags"
+        value={newWord.tags}
+        onChange={handleChange}
+        placeholder="Введите тэг"
+      />
+      <button onClick={handleAdd}>Добавить слово</button>
+    </div>
+  );
+});
+
+export default AddWord;

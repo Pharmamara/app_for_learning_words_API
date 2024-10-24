@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+/*import React, { useState, useContext } from "react";
 import { updateWord, deleteWord } from "../../api/wordAPI";
 import { WordsContext } from "../../context/WordsContext"; // Импортируем контекст
 import Loader from "../loader/loader";
@@ -162,4 +162,75 @@ export default function WordTable({ wordItem }) {
       {isEditMode ? saveCancelBtns() : editDeleteBtns()}
     </div>
   );
-}
+}*/
+
+import React, { useState, useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import wordStore from "../../WordStore";
+import style from "./wordTable.module.css";
+
+const WordTable = observer(({ wordItem }) => {
+  useEffect(() => {
+    wordStore.fetchWords();
+  }, []);
+  if (wordStore.isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (wordStore.words.length === 0) {
+    return <div>No words available</div>;
+  }
+
+  const [isEditMode, setEditMode] = useState(false);
+  const [name, setName] = useState(wordItem.english);
+  const [nameRussian, setNameRussian] = useState(wordItem.russian);
+  const [nameTranscription, setNameTranscription] = useState(
+    wordItem.transcription
+  );
+  const [nameTag, setNameTag] = useState(wordItem.tags);
+
+  const handleSave = () => {
+    wordStore.updateWord(wordItem.id, {
+      english: name,
+      russian: nameRussian,
+      transcription: nameTranscription,
+      tags: nameTag,
+    });
+    setEditMode(false);
+  };
+
+  const handleDelete = () => {
+    wordStore.deleteWord(wordItem.id);
+  };
+
+  return (
+    <div className={style.tableContainer}>
+      {isEditMode ? (
+        <>
+          <input value={name} onChange={(e) => setName(e.target.value)} />
+          <input
+            value={nameRussian}
+            onChange={(e) => setNameRussian(e.target.value)}
+          />
+          <input
+            value={nameTranscription}
+            onChange={(e) => setNameTranscription(e.target.value)}
+          />
+          <input value={nameTag} onChange={(e) => setNameTag(e.target.value)} />
+          <button onClick={handleSave}>Сохранить</button>
+          <button onClick={() => setEditMode(false)}>Отмена</button>
+        </>
+      ) : (
+        <>
+          <div>{wordItem.english}</div>
+          <div>{wordItem.russian}</div>
+          <div>{wordItem.transcription}</div>
+          <div>{wordItem.tags}</div>
+          <button onClick={() => setEditMode(true)}>Редактировать</button>
+          <button onClick={handleDelete}>Удалить</button>
+        </>
+      )}
+    </div>
+  );
+});
+
+export default WordTable;
