@@ -3,10 +3,27 @@ import { makeAutoObservable, runInAction } from "mobx";
 class WordStore {
   words = [];
   isLoading = false;
+  currentIndex = 0;
+  learnedCount = 0;
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  // Метод для перехода к предыдущей карточке
+  showPrevCard = () => {
+    if (this.currentIndex > 0) this.currentIndex--;
+  };
+
+  // Метод для перехода к следующей карточке
+  showNextCard = () => {
+    if (this.currentIndex < this.words.length - 1) this.currentIndex++;
+  };
+
+  // Увеличение количества изученных слов
+  incrementLearnedCount = () => {
+    if (this.learnedCount < this.words.length) this.learnedCount++;
+  };
 
   // Получение слов с сервера
   async fetchWords() {
@@ -21,7 +38,12 @@ class WordStore {
       }
       const data = await response.json();
       runInAction(() => {
-        this.words = data;
+        /*this.words = data;*/
+        this.words = data.map((word) => ({
+          ...word,
+          showTranslation: false, // Add this for translation toggle
+          learned: false, // Add this for learned state tracking
+        }));
         console.log("Words loaded:", data); // Лог после успешной загрузки
       });
     } catch (error) {

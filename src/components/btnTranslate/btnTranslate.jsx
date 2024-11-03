@@ -1,29 +1,32 @@
-import React from "react";
-import { useRef, useEffect } from "react";
+import React, { useState, forwardRef, useEffect } from "react";
 import style from "./btnTranslate.module.css";
 
-export default function BtnTranslate(props) {
-  const btnReference = useRef(null);
-  useEffect(() => {
-    if (btnReference.current) {
-      btnReference.current.focus();
-    }
-    //если не добавить условие в массив зависимостей, фокус сработает на кнопке btnTranslate только после отрисовки 1-ой карточки
-  }, [props.translate]);
+const BtnTranslate = forwardRef(({ translate, onLearned }, ref) => {
+  const [isTranslationShown, setIsTranslationShown] = useState(false);
+  const [isLearnedCounted, setIsLearnedCounted] = useState(false);
 
-  const handleClick = () => {
-    props.setPressed(!props.pressed);
-    props.countWords();
+  // Функция для переключения состояния отображения перевода
+  const handleToggleTranslation = () => {
+    setIsTranslationShown(true);
+
+    // Вызываем onLearned только при первом нажатии для текущей карточки
+    if (!isLearnedCounted && onLearned) {
+      onLearned();
+      setIsLearnedCounted(true); // Отмечаем, что слово изучено
+    }
   };
+
+  // Сбрасываем состояние кнопки при каждой новой карточке
+  useEffect(() => {
+    setIsTranslationShown(false);
+    setIsLearnedCounted(false);
+  }, [ref]);
+
   return (
-    <div className={style.btn}>
-      {props.pressed ? (
-        <span className={style.translate}>{props.translate}</span>
-      ) : (
-        <button ref={btnReference} className={style.btn} onClick={handleClick}>
-          показать перевод
-        </button>
-      )}
-    </div>
+    <button ref={ref} onClick={handleToggleTranslation} className={style.btn}>
+      {isTranslationShown ? translate : "Показать перевод"}
+    </button>
   );
-}
+});
+
+export default BtnTranslate;

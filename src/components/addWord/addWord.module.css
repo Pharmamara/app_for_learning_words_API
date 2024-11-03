@@ -53,3 +53,7 @@
   color: black;
   overflow-wrap: break-word;
 }
+
+.errorInput {
+  border: 1px solid red;
+}
