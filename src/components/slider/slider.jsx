@@ -1,55 +1,48 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useCallback, useRef } from "react";
+import { observer } from "mobx-react-lite";
+import wordStore from "../../WordStore";
 import WordCard from "../wordCard/WordCard";
-import { WordsContext } from "../../context/WordsContext"; // Импортируем контекст
 import Loader from "../loader/loader";
 import ArrowLeft from "./arrow_left.svg";
 import ArrowRight from "./arrow_right.svg";
 import style from "./slider.module.css";
 
-export default function Slider() {
-  const { words, loading, error } = useContext(WordsContext); // Получаем данные из контекста
-  const [pressed, setPressed] = useState(false);
-  const [cardIndex, setCardIndex] = useState(0);
-  const [learned, setLearned] = useState(0);
+const Slider = observer(() => {
+  const {
+    words,
+    isLoading,
+    currentIndex,
+    learnedCount,
+    showPrevCard,
+    showNextCard,
+    incrementLearnedCount,
+    fetchWords,
+  } = wordStore;
 
-  // Проверяем, если слова еще загружаются или произошла ошибка
-  if (loading) return <Loader />;
-  if (error) return <div className={style.error}>{error}</div>;
+  const memoizedFetchWords = useCallback(fetchWords, [fetchWords]);
+
+  // Реф для кнопки BtnTranslate
+  const btnTranslateRef = useRef(null);
+
+  useEffect(() => {
+    if (!words.length) {
+      memoizedFetchWords();
+    }
+  }, [memoizedFetchWords, words.length]);
+
+  // Устанавливаем фокус на кнопке при изменении currentIndex
+  useEffect(() => {
+    if (btnTranslateRef.current) {
+      btnTranslateRef.current.focus();
+    }
+  }, [currentIndex]);
+
+  if (isLoading) return <Loader />;
   if (!words.length)
     return <div className={style.error}>нет слов, доступных для изучения</div>;
 
-  const showPrevCard = () => {
-    let index = cardIndex;
-
-    if (index !== 0) {
-      index--;
-      setCardIndex(index);
-    } else if (index === 0) {
-      setCardIndex(0);
-    }
-    setPressed(false);
-  };
-
-  const showNextCard = () => {
-    let index = cardIndex;
-
-    if (index !== words.length - 1) {
-      index++;
-      setCardIndex(index);
-    } else if (index === words.length - 1) {
-      setCardIndex(words.length - 1);
-    }
-    setPressed(false);
-  };
-
-  // Функция для увеличения количества изученных слов
-  const countWords = () => {
-    let learnedWords = learned;
-
-    if (learnedWords !== words.length) {
-      setLearned(learnedWords + 1);
-    }
-  };
+  const currentWord = words[currentIndex];
+  if (!currentWord) return null;
 
   return (
     <div className={style.main}>
@@ -62,14 +55,14 @@ export default function Slider() {
           />
         </button>
 
-        {/* Передаем данные из контекста в WordCard */}
         <WordCard
-          word={words[cardIndex].english}
-          transcription={words[cardIndex].transcription}
-          translate={words[cardIndex].russian}
-          pressed={pressed}
-          setPressed={setPressed}
-          countWords={countWords}
+          key={currentIndex} // Добавляем key для принудительной перерисовки WordCard
+          word={currentWord.english}
+          transcription={currentWord.transcription}
+          translate={currentWord.russian}
+          learned={currentWord.learned}
+          onLearned={incrementLearnedCount}
+          btnTranslateRef={btnTranslateRef} // Передаем реф
         />
 
         <button onClick={showNextCard} className={style.next_btn}>
@@ -82,8 +75,10 @@ export default function Slider() {
       </div>
 
       <div className={style.wordCounter}>
-        Изучено {learned} из {words.length} слов
+        Изучено {learnedCount} из {words.length} слов
       </div>
     </div>
   );
-}
+});
+
+export default Slider;

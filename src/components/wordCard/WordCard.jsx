@@ -6,9 +6,9 @@ export default function WordCard({
   word,
   transcription,
   translate,
-  pressed,
-  setPressed,
-  countWords,
+  learned,
+  onLearned,
+  btnTranslateRef, // Получаем реф от Slider
 }) {
   return (
     <div className={style.wordContainer}>
@@ -16,10 +16,10 @@ export default function WordCard({
       <h3 className={style.transcription}>{transcription}</h3>
       <BtnTranslate
         translate={translate}
-        pressed={pressed}
-        setPressed={setPressed}
-        countWords={countWords} // передача счетчика в родительский компонент
+        onLearned={onLearned}
+        ref={btnTranslateRef} // Передаем реф на кнопку
       />
+      {learned && <p className={style.learned}>Изучено</p>}
     </div>
   );
 }

@@ -1,17 +1,17 @@
-import React, { useState, useContext } from "react";
-import { WordsContext } from "../../context/WordsContext"; // Подключаем контекст
-import { API_URL } from "./../../api/wordAPI";
+import React, { useState } from "react";
+import { observer } from "mobx-react-lite";
+import wordStore from "../../WordStore";
 import style from "./addWord.module.css";
 
-export default function AddWord() {
-  const { setWords } = useContext(WordsContext); // Достаем функцию обновления слов
-  const [isEditMode, setIsEditMode] = useState(false);
+const AddWord = observer(() => {
   const [newWord, setNewWord] = useState({
     english: "",
     russian: "",
     transcription: "",
     tags: "",
   });
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [errors, setErrors] = useState({});
 
   // Обработчики изменения полей
   const handleChange = (e) => {
@@ -20,36 +20,22 @@ export default function AddWord() {
       ...prevWord,
       [name]: value,
     }));
+
+    // Убираем ошибку при вводе значения
+    if (errors[name] && value.trim()) {
+      setErrors((prevErrors) => ({ ...prevErrors, [name]: false }));
+    }
   };
 
-  // Функция добавления слова в API
-  const handleAddWord = async () => {
-    try {
-      const response = await fetch(`${API_URL}/add`, {
-        method: "POST",
-        body: JSON.stringify(newWord), // Отправляем новое слово на сервер
-      });
-
-      if (!response.ok) {
-        throw new Error("Ошибка при добавлении слова");
-      }
-
-      const addedWord = await response.json(); // Получаем добавленное слово
-
-      // Обновляем состояние контекста
-      setWords((prevWords) => [...prevWords, addedWord]);
-
-      // Сбрасываем режим редактирования и очищаем поля
-      setIsEditMode(false);
-      setNewWord({
-        english: "",
-        russian: "",
-        transcription: "",
-        tags: "",
-      });
-    } catch (error) {
-      console.error("Ошибка при добавлении слова:", error);
-    }
+  // Валидация полей
+  const validateFields = () => {
+    const newErrors = {};
+    if (!newWord.english.trim()) newErrors.english = true;
+    if (!newWord.russian.trim()) newErrors.russian = true;
+    if (!newWord.transcription.trim()) newErrors.transcription = true;
+    if (!newWord.tags.trim()) newErrors.tags = true;
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleEditMode = () => {
@@ -64,6 +50,20 @@ export default function AddWord() {
       transcription: "",
       tags: "",
     });
+    setErrors({}); // Сбрасываем ошибки при отмене
+  };
+
+  const handleAddWord = () => {
+    if (validateFields()) {
+      wordStore.addWord(newWord);
+      setNewWord({
+        english: "",
+        russian: "",
+        transcription: "",
+        tags: "",
+      });
+      setErrors({});
+    }
   };
 
   return (
@@ -73,7 +73,9 @@ export default function AddWord() {
           <input
             type="text"
             name="english"
-            className={style.input}
+            className={`${style.input} ${
+              errors.english ? style.errorInput : ""
+            }`}
             placeholder="Введите слово"
             value={newWord.english}
             onChange={handleChange}
@@ -81,7 +83,9 @@ export default function AddWord() {
           <input
             type="text"
             name="russian"
-            className={style.input}
+            className={`${style.input} ${
+              errors.russian ? style.errorInput : ""
+            }`}
             placeholder="Введите перевод"
             value={newWord.russian}
             onChange={handleChange}
@@ -89,7 +93,9 @@ export default function AddWord() {
           <input
             type="text"
             name="transcription"
-            className={style.input}
+            className={`${style.input} ${
+              errors.transcription ? style.errorInput : ""
+            }`}
             placeholder="Введите транскрипцию"
             value={newWord.transcription}
             onChange={handleChange}
@@ -97,13 +103,17 @@ export default function AddWord() {
           <input
             type="text"
             name="tags"
-            className={style.input}
+            className={`${style.input} ${errors.tags ? style.errorInput : ""}`}
             placeholder="Введите тэг"
             value={newWord.tags}
             onChange={handleChange}
           />
           <div className={style.buttons}>
-            <button className={style.btn} onClick={handleAddWord}>
+            <button
+              className={style.btn}
+              onClick={handleAddWord}
+              disabled={Object.keys(errors).some((key) => errors[key])}
+            >
               Сохранить
             </button>
             <button className={style.btn} onClick={handleCancel}>
@@ -127,4 +137,6 @@ export default function AddWord() {
       )}
     </div>
   );
-}
+});
+
+export default AddWord;
